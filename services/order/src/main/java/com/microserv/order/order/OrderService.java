@@ -6,6 +6,8 @@ import com.microserv.order.kafka.OrderConfirmation;
 import com.microserv.order.kafka.OrderProducer;
 import com.microserv.order.orderline.OrderLineRequest;
 import com.microserv.order.orderline.OrderLineService;
+import com.microserv.order.payment.PaymentClient;
+import com.microserv.order.payment.PaymentRequest;
 import com.microserv.order.product.ProductClient;
 import com.microserv.order.product.PurchaseRequest;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,16 +25,18 @@ public class OrderService {
     private OrderMapper orderMapper;
     private OrderLineService orderLineService;
     private OrderProducer orderProducer;
+    private PaymentClient paymentClient;
 
     public OrderService (OrderRepository orderRepository, CustomerClient customerClient,
                          ProductClient productClient, OrderMapper orderMapper, OrderLineService orderLineService,
-                         OrderProducer orderProducer) {
+                         OrderProducer orderProducer, PaymentClient paymentClient) {
         this.orderRepository = orderRepository;
         this.customerClient = customerClient;
         this.productClient = productClient;
         this.orderMapper = orderMapper;
         this.orderLineService = orderLineService;
         this.orderProducer = orderProducer;
+        this.paymentClient = paymentClient;
     }
 
     public Long createOrder(OrderRequest orderRequest) {
@@ -61,7 +65,15 @@ public class OrderService {
             );
         }
 
-        // todo start payment process
+        // start payment process
+        var paymentRequest = new PaymentRequest(
+                orderRequest.amount(),
+                orderRequest.paymentMethod(),
+                orderRequest.id(),
+                orderRequest.reference(),
+                customer
+        );
+        paymentClient.requestOrderPayment(paymentRequest);
 
         // send the order confirmation to our notification microservice (kafka)
         orderProducer.sendOrderConfirmation(

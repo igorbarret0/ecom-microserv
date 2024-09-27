@@ -7,6 +7,13 @@ spring:
     hibernate.ddl-auto: update
     generate-ddl: true
     show-sql: true
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: orderConfirmation:com.microserv.order.kafka.OrderConfirmation
 server:
   port: 8070
 

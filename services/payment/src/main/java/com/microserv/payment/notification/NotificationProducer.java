@@ -14,12 +14,16 @@ public class NotificationProducer {
     private static final Logger log = LoggerFactory.getLogger(NotificationProducer.class);
     private KafkaTemplate<String, PaymentNotificationRequest> kafkaTemplate;
 
+    public NotificationProducer(KafkaTemplate<String, PaymentNotificationRequest> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
     public void sendNotification(PaymentNotificationRequest request) {
 
         log.info("Sending notification with body: <{}>", request);
         Message<PaymentNotificationRequest> message = MessageBuilder
                 .withPayload(request)
-                .setHeader(KafkaHeaders.TOPIC, "payment-notification")
+                .setHeader(KafkaHeaders.TOPIC, "payment-topic")
                 .build();
 
         kafkaTemplate.send(message);

@@ -10,7 +10,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -41,8 +40,8 @@ public class Order {
     private Instant createdAt;
 
     @UpdateTimestamp
-    @Column(insertable = false, nullable = false)
-    private LocalDateTime modifiedAt;
+    @Column(nullable = false)
+    private Instant modifiedAt;
 
     public Long getId() {
         return id;
@@ -100,11 +99,11 @@ public class Order {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getModifiedAt() {
+    public Instant getModifiedAt() {
         return modifiedAt;
     }
 
-    public void setModifiedAt(LocalDateTime modifiedAt) {
+    public void setModifiedAt(Instant modifiedAt) {
         this.modifiedAt = modifiedAt;
     }
 }

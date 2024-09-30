@@ -3,16 +3,16 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/
       database: customer
-    kafka:
-      consumer:
-        bootstrap-servers: localhost:9092
-        group-id: payment-group, order-group
-        auto-offset-reset: earliest
-        key-deserializer: org.apache.kafka.common.serialization.StringDes rializer
-        value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-        properties:
-          spring.json.trusted.packages: '*'
-          spring.json.type.mapping: orderConfirmation:com.microserv.notification.kafka.order.OrderConfirmation;, paymentConfirmatiom:com.microserv.notification.kafka.payment.PaymentNotification
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: payment-group, order-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDes rializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+        spring.json.type.mapping: orderConfirmation:com.microserv.notification.kafka.order.OrderConfirmation;, paymentConfirmatiom:com.microserv.notification.kafka.payment.PaymentNotification
   mail:
     host: localhost
     port: 1025

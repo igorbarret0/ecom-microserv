@@ -45,12 +45,14 @@ public class OrderService {
         var customer = this.customerClient.findCustomerById(orderRequest.customerId())
                 .orElseThrow(() -> new BusinessException("Cannot create order: No customer found with the providade id: " + orderRequest.customerId()));
 
-
         // purchase the product -> product microservice
         var purchasedProducts = this.productClient.purchaseProducts(orderRequest.products());
 
         // persist order
         var order = this.orderRepository.save(orderMapper.toOrder(orderRequest));
+
+        // Ensure the order is saved and flushed to the database
+        this.orderRepository.flush();  // Force the order to be persisted
 
         // persist order lines
         for (PurchaseRequest purchaseRequest : orderRequest.products()) {
@@ -58,7 +60,7 @@ public class OrderService {
             orderLineService.saveOrderLine(
                     new OrderLineRequest(
                             null,
-                            orderRequest.id(),
+                            order.getId(), // Use the generated ID of the saved order
                             purchaseRequest.productId(),
                             purchaseRequest.quantity()
                     )
@@ -69,7 +71,7 @@ public class OrderService {
         var paymentRequest = new PaymentRequest(
                 orderRequest.amount(),
                 orderRequest.paymentMethod(),
-                orderRequest.id(),
+                order.getId(),  // Use the order ID that was persisted
                 orderRequest.reference(),
                 customer
         );
@@ -87,7 +89,6 @@ public class OrderService {
         );
 
         return order.getId();
-
     }
 
     public List<OrderResponse> findAll() {

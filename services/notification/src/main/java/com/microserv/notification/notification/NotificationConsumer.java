@@ -52,10 +52,10 @@ public class NotificationConsumer {
         notificationRepository.save(notification);
 
         // send email
-        var cusotmerName = orderConfirmation.customer().firstName() + " " + orderConfirmation.customer().lastName();
+        var customerName = orderConfirmation.customer().firstName() + " " + orderConfirmation.customer().lastName();
         emailService.sentOrderSuccessEmail(
                 orderConfirmation.customer().email(),
-                cusotmerName,
+                customerName,
                 orderConfirmation.totalAmount(),
                 orderConfirmation.orderReference(),
                 orderConfirmation.products()

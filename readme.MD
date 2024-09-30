@@ -1,4 +1,4 @@
-h1>E-Commerce Simulado - Arquitetura de Microsserviços</h1>
+E-Commerce Simulado - Arquitetura de Microsserviços</h1>
 
 Este projeto simula um sistema de e-commerce utilizando uma arquitetura de microsserviços. O principal objetivo deste projeto é o estudo e a implementação de uma arquitetura distribuída, abordando conceitos como comunicação entre serviços, uso de tecnologias de mensageria como Kafka, gerenciamento de configurações centralizado com Spring Cloud Config, e uso de containers com Docker e Docker Compose para orquestração dos microsserviços.
 ## Tecnologias
